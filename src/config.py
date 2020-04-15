@@ -15,7 +15,7 @@ model_path = Path('../data/model/')
 stage = 'stage_one'
 
 #encoder parameter
-bert_model = 'bert-large-cased'
+bert_model = 'bert-base-cased'
 
 try:
     encoder = BertModel.from_pretrained(model_path/stage/bert_model)
