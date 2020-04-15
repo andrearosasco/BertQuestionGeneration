@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-from stage_one.config import device
+from config import device
 
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 

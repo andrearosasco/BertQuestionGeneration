@@ -3,7 +3,7 @@ import time
 import torch
 import torch.nn as nn
 
-from stage_one.config import device
+from config import device
 from .utils import epoch_time
 
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index

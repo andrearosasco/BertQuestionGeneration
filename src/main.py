@@ -5,7 +5,7 @@ import torch
 from torch import optim, nn
 from torch.utils.data import DataLoader
 
-from stage_one.config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_size, decoder_hidden_size, \
+from config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_size, decoder_hidden_size, \
     bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, encoder
 from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility
 from model import Attention, Decoder, Seq2Seq
