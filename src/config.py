@@ -16,7 +16,13 @@ stage = 'stage_one'
 
 #encoder parameter
 bert_model = 'bert-large-cased'
-encoder = BertModel.from_pretrained(model_path/stage/bert_model)
+
+try:
+    encoder = BertModel.from_pretrained(model_path/stage/bert_model)
+except OSError:
+    encoder = BertModel.from_pretrained(bert_model)
+    encoder.save(model_path/stage/bert_model)
+
 bert_hidden_size = encoder.config.hidden_size
 bert_vocab_size = encoder.config.vocab_size
 
