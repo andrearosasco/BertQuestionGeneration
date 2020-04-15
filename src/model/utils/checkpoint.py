@@ -1,3 +1,6 @@
+import torch
+
+
 def save_checkpoint(name, epoch, model, optimizer, valid_loss, train_loss):
     torch.save({
             'epoch': epoch,
