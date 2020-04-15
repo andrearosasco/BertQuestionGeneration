@@ -17,7 +17,7 @@ def eval(model, dataloader, criterion):
             input_data, input_length = input_
             output_data, output_length = output_
 
-            prediction = model(input_data.to(device), output_data.to(device), 0)  # turn off teacher forcing
+            prediction = model([x.to(device) for x in input_data], output_data.to(device), 0)  # turn off teacher forcing
 
             trg_sent_len = prediction.size(1)
             # trg = [trg sent len, batch size]
