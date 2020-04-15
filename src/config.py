@@ -23,6 +23,9 @@ except OSError:
     encoder = BertModel.from_pretrained(bert_model)
     encoder.save_pretrained(model_path/stage/bert_model)
 
+for p in encoder.parameters():
+    p.requires_grad = False
+
 bert_hidden_size = encoder.config.hidden_size
 bert_vocab_size = encoder.config.vocab_size
 

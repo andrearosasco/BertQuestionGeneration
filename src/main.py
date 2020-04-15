@@ -7,11 +7,12 @@ from torch.utils.data import DataLoader
 
 from config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_size, decoder_hidden_size, \
     bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, encoder
-from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility
+from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility, model_size
 from model import Attention, Decoder, Seq2Seq
 from data import BertDataset
 from run import train, eval
 from run.utils.time import epoch_time
+
 # best_valid_loss = float('inf')
 
 
@@ -20,22 +21,21 @@ from run.utils.time import epoch_time
 if __name__ == '__main__':
     enable_reproducibility(1234)
 
-    train_set = BertDataset(bert_path/'toy')
-    valid_set = BertDataset(bert_path/'toy')
+    train_set = BertDataset(bert_path / 'toy')
+    valid_set = BertDataset(bert_path / 'toy')
     training_loader = DataLoader(train_set, batch_size=mb, shuffle=True,
-                                 num_workers=dl_workers, pin_memory=True if device=='cuda' else False)
+                                 num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
     valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=False,
-                              num_workers=dl_workers, pin_memory=True if device=='cuda' else False)
+                              num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
 
-    attention = Attention(bert_hidden_size, decoder_hidden_size) #add attention_hidden_size
+    attention = Attention(bert_hidden_size, decoder_hidden_size)  # add attention_hidden_size
     decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size,
                       dropout, attention, device)
 
     model = Seq2Seq(encoder, decoder, device)
 
     optimizer = optim.Adam(decoder.parameters())
-    criterion = nn.CrossEntropyLoss(ignore_index = 0, reduction='none')  # Pad Index
-
+    criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index
 
     if checkpoint is not None:
         last_epoch, model_dict, optim_dict, valid_loss_list, train_loss_list = load_checkpoint(checkpoint)
@@ -57,6 +57,11 @@ if __name__ == '__main__':
 
     model.to(device)
 
+    print(f'Encoder {model_size(encoder)}')
+    print(f'Decoder {model_size(decoder)}')
+    print(f'Whole model {model_size(model)}')
+    exit(0)
+
     for epoch in range(last_epoch, epochs):
         start_time = time.time()
 
@@ -72,7 +77,7 @@ if __name__ == '__main__':
 
         #     if valid_loss < best_valid_loss:
         #         best_valid_loss = valid_loss
-        save_checkpoint(model_path/f'model0epoch{epoch}', epoch, model, optimizer, valid_loss_list, train_loss_list)
+        save_checkpoint(model_path / f'model0epoch{epoch}', epoch, model, optimizer, valid_loss_list, train_loss_list)
 
         print(f'Epoch: {epoch + 1:02} | Time: {epoch_mins}m {epoch_secs}s')
         print(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
