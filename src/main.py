@@ -57,10 +57,6 @@ if __name__ == '__main__':
 
     model.to(device)
 
-    print(f'Encoder {model_size(encoder)}')
-    print(f'Decoder {model_size(decoder)}')
-    print(f'Whole model {model_size(model)}')
-    exit(0)
 
     for epoch in range(last_epoch, epochs):
         start_time = time.time()
