@@ -14,8 +14,7 @@ def train(model, dataloader, optimizer, criterion, clip):
     epoch_loss = 0
 
     start = time.time()
-    for i, data in enumerate(dataloader):
-        input_, output_ = data
+    for i, (input_, output_) in enumerate(dataloader):
 
         input_data, input_length = input_
         output_data, output_length = output_
