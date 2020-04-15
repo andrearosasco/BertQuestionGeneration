@@ -1,10 +1,7 @@
 import json
 import pickle
-from pprint import pprint
 
-import numpy as np
 from transformers import BertTokenizer
-from torch.utils.data import Dataset
 
 
 class Preprocess:
@@ -64,8 +61,8 @@ def _tokenize_data(input, output, bert_model):
 
     return data
 
-from config import bert_model
+
 
 if __name__ == '__main__':
-    dataset = Preprocess('../data/squad/squad-v1.1-valid.json', bert_model)
+    dataset = Preprocess('../data/squad/squad-v1.1-valid.json', 'bert-base-cased')
     dataset.save('../data/bert/toy')
