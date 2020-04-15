@@ -14,8 +14,8 @@ def eval(model, dataloader, criterion):
 
         for i, (input_, output_) in enumerate(dataloader):
 
-            input_length, input_data = input_
-            output_length, output_data = output_
+            input_data, input_length = input_
+            output_data, output_length = output_
 
             prediction = model(input_data.to(device), output_data.to(device), 0)  # turn off teacher forcing
 
