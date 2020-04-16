@@ -32,8 +32,8 @@ def _extract_squad_data(data):
                 input.append((context, answer))
                 output.append(question)
                 # qui si possono inserire condizioni per limitare la grandezza del dataset
-    input = input[:int(0.1 * len(input))]  # prende il 10% di tutto il dataset
-    output = output[:int(0.1 * len(output))]
+    # input = input[:int(0.1 * len(input))]  # prende il 10% di tutto il dataset
+    # output = output[:int(0.1 * len(output))]
     return input, output
 
 
