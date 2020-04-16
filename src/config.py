@@ -7,15 +7,15 @@ from transformers import BertModel, BertConfig
 #runtime environment
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
+bert_model = 'bert-base-cased'
 #paths
 squad_path = Path('../data/squad')
-bert_path = Path('../data/bert')
+bert_path = Path('../data/bert')/bert_model
 model_path = Path('../data/model/')
 
 stage = 'stage_one'
 
 #encoder parameter
-bert_model = 'bert-base-cased'
 
 try:
     encoder = BertModel.from_pretrained(model_path/stage/bert_model)
