@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader
 from transformers import BertModel
 
 from config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_size, decoder_hidden_size, \
-    bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, stage, bert_model
-from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility, model_size
+    bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, stage, bert_model, encoder_trained
+from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility, model_size, no_grad
 from model import Attention, Decoder, Seq2Seq
 from data import BertDataset
 from run import train, eval
@@ -35,8 +35,7 @@ if __name__ == '__main__':
     decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size,
                       dropout, attention, device)
     encoder = BertModel.from_pretrained(model_path / stage / bert_model)
-    for p in encoder.parameters():
-        p.requires_grad = False
+    encoder = encoder if encoder_trained else no_grad(encoder)
 
     model = Seq2Seq(encoder, decoder, device)
 

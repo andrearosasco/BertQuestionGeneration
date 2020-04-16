@@ -17,6 +17,9 @@ def init_weights(m):
         else:
             nn.init.constant_(param.data, 0)
 
+def no_grad(model):
+    for p in model.parameters():
+        p.requires_grad = False
 
 def no_trainable_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
