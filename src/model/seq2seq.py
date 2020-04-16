@@ -19,9 +19,9 @@ class Seq2Seq(nn.Module):
         # e.g. if teacher_forcing_ratio is 0.75 we use teacher forcing 75% of the time
 
         input_ids, token_type_ids, attention_mask = src
-        with torch.no_grad():
-            outputs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
-            bert_encodings = outputs[0]
+
+        outputs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+        bert_encodings = outputs[0]
 
         batch_size = trg.shape[0]
         max_len = trg.shape[1]
