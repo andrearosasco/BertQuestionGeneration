@@ -45,7 +45,7 @@ bert_path = Path('../data/bert')
 model_path = Path('../data/model/')
 
 stage = 'stage_one'
-bert_model = 'bert-base-cased'
+bert_model = 'bert-large-cased'
 
 # if not present download the right bert version and preprocess and save the dataset
 setup(bert_model, model_path, stage, squad_path, bert_path)
