@@ -64,5 +64,6 @@ def _tokenize_data(input, output, bert_model):
 
 
 if __name__ == '__main__':
-    dataset = Preprocess('../data/squad/squad-v1.1-valid.json', 'bert-base-cased')
-    dataset.save('../data/bert/toy')
+    pass
+    # dataset = Preprocess('../data/squad/squad-v1.1-train.json', bert_model)
+    # dataset.save(f'../data/bert/{bert_model}/train')

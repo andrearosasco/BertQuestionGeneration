@@ -1,11 +1,13 @@
+import logging
+log = logging.getLogger('QGModel')
+
 import torch
 from torch import nn
 
-from config import device
 
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 
-def eval(model, dataloader, criterion):
+def eval(model, device, dataloader, criterion):
     model.eval()
 
     epoch_loss = 0
@@ -37,7 +39,7 @@ def eval(model, dataloader, criterion):
             loss = loss.mean(0)
 
             if i % int(len(dataloader) * 0.1) == int(len(dataloader) * 0.1) - 1:
-                print(f'Batch {i} Sentence loss: {loss.item()} Word loss: {pw_loss.item()}')
+                log.info(f'Batch {i} Sentence loss: {loss.item()} Word loss: {pw_loss.item()}')
 
             epoch_loss += loss.item()
 

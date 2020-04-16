@@ -1,12 +1,15 @@
 import time
 import math
+import logging
+log = logging.getLogger('QGModel')
 
 import torch
 from torch import optim, nn
 from torch.utils.data import DataLoader
+from transformers import BertModel
 
 from config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_size, decoder_hidden_size, \
-    bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, encoder
+    bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, stage, bert_model
 from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility, model_size
 from model import Attention, Decoder, Seq2Seq
 from data import BertDataset
@@ -21,8 +24,8 @@ from run.utils.time import epoch_time
 if __name__ == '__main__':
     enable_reproducibility(1234)
 
-    train_set = BertDataset(bert_path / 'toy')
-    valid_set = BertDataset(bert_path / 'toy')
+    train_set = BertDataset(bert_path / bert_model / 'train')
+    valid_set = BertDataset(bert_path / bert_model / 'test')
     training_loader = DataLoader(train_set, batch_size=mb, shuffle=True,
                                  num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
     valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=False,
@@ -31,6 +34,9 @@ if __name__ == '__main__':
     attention = Attention(bert_hidden_size, decoder_hidden_size)  # add attention_hidden_size
     decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size,
                       dropout, attention, device)
+    encoder = BertModel.from_pretrained(model_path / stage / bert_model)
+    for p in encoder.parameters():
+        p.requires_grad = False
 
     model = Seq2Seq(encoder, decoder, device)
 
@@ -61,8 +67,10 @@ if __name__ == '__main__':
     for epoch in range(last_epoch, epochs):
         start_time = time.time()
 
-        train_loss = train(model, training_loader, optimizer, criterion, clip)
-        valid_loss = eval(model, valid_loader, criterion)
+        log.info(f'Epoch {epoch+1} training')
+        train_loss = train(model, device, training_loader, optimizer, criterion, clip)
+        log.info(f'\nEpoch {epoch + 1} validation')
+        valid_loss = eval(model, device, valid_loader, criterion)
 
         train_loss_list.append(train_loss)
         valid_loss_list.append(valid_loss)
@@ -75,6 +83,6 @@ if __name__ == '__main__':
         #         best_valid_loss = valid_loss
         save_checkpoint(model_path / f'model0epoch{epoch}', epoch, model, optimizer, valid_loss_list, train_loss_list)
 
-        print(f'Epoch: {epoch + 1:02} | Time: {epoch_mins}m {epoch_secs}s')
-        print(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
-        print(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}')
+        log.info(f'\nEpoch: {epoch + 1:02} completed | Time: {epoch_mins}m {epoch_secs}s')
+        log.info(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
+        log.info(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}\n\n')

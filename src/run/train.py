@@ -1,14 +1,15 @@
 import time
+import logging
+log = logging.getLogger('QGModel')
 
 import torch
 import torch.nn as nn
 
-from config import device
 from .utils import epoch_time
 
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 
-def train(model, dataloader, optimizer, criterion, clip):
+def train(model, device, dataloader, optimizer, criterion, clip):
     model.train()
 
     epoch_loss = 0
@@ -43,7 +44,7 @@ def train(model, dataloader, optimizer, criterion, clip):
         optimizer.step()
 
         if i % int(len(dataloader) * 0.1) == int(len(dataloader) * 0.1) - 1:
-            print(
+            log.info(
                 f'Batch {i} Sentence loss {loss.item()} Word loss {pw_loss.item()}   Time: {epoch_time(start, time.time())}')
             start = time.time()
 

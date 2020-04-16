@@ -1,33 +1,34 @@
+import json
 from pathlib import Path
-
 import torch
-from transformers import BertModel, BertConfig
-
+import logging
+log = logging.getLogger('QGModel')
 
 #runtime environment
+from transformers import BertModel
+
+from data import Preprocess
+
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-bert_model = 'bert-base-cased'
+
 #paths
 squad_path = Path('../data/squad')
-bert_path = Path('../data/bert')/bert_model
+bert_path = Path('../data/bert')
 model_path = Path('../data/model/')
 
 stage = 'stage_one'
+bert_model = 'bert-base-cased'
+
+# if not present download the right bert version and preprocess and save the dataset
+setup(bert_model, model_path, stage, squad_path, bert_path)
 
 #encoder parameter
 
-try:
-    encoder = BertModel.from_pretrained(model_path/stage/bert_model)
-except OSError:
-    encoder = BertModel.from_pretrained(bert_model)
-    encoder.save_pretrained(model_path/stage/bert_model)
-
-for p in encoder.parameters():
-    p.requires_grad = False
-
-bert_hidden_size = encoder.config.hidden_size
-bert_vocab_size = encoder.config.vocab_size
+with (model_path/stage/bert_model/'config.json').open('r') as f:
+    conf = json.load(f)
+    bert_hidden_size = conf['hidden_size']
+    bert_vocab_size = conf['vocab_size']
 
 #decoder parameter
 decoder_hidden_size = 512
@@ -40,3 +41,27 @@ epochs = 4
 mb = 8
 dl_workers = 1
 checkpoint = None
+
+
+
+def setup(bert_model, model_path, stage, squad_path, bert_path, log):
+    file = Path('.setup').open('a+')
+    file.seek(0, 0)
+
+    if bert_model in (file.readline().split()):
+        file.close()
+        log.info(f'Setup: {bert_model} setup already performed')
+        return
+    file.write(f' {bert_model} ')
+    file.close()
+
+    log.info(f'Setup: downloading {bert_model}')
+    BertModel.from_pretrained(bert_model).save_pretrained(model_path/stage/bert_model)
+
+
+    log.info(f'Setup: preprocessing {bert_model} input')
+    for x in squad_path.iterdir():
+        if x.is_file():
+            dataset = Preprocess(squad_path/x.name, bert_model)
+            dataset.save(bert_path/bert_model/x.name[11:-5])
+    log.info(f'Setup: {bert_model} setup completed')
