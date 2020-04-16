@@ -1,5 +1,4 @@
 import logging
-log = logging.getLogger('QGModel')
 
 import torch
 from torch import nn
@@ -8,6 +7,7 @@ from torch import nn
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 
 def eval(model, device, dataloader, criterion):
+    log = logging.getLogger('QGModel')
     model.eval()
 
     epoch_loss = 0

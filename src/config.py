@@ -2,14 +2,15 @@ import json
 from pathlib import Path
 import torch
 import logging
-log = logging.getLogger('QGModel')
 
 from transformers import BertModel
 
 from data import Preprocess
 
 
-def setup(bert_model, model_path, stage, squad_path, bert_path, log):
+def setup(bert_model, model_path, stage, squad_path, bert_path):
+    log = logging.getLogger('QGModel')
+
     file = Path('.setup').open('a+')
     file.seek(0, 0)
 

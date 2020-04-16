@@ -1,6 +1,5 @@
 import time
 import logging
-log = logging.getLogger('QGModel')
 
 import torch
 import torch.nn as nn
@@ -10,6 +9,7 @@ from .utils import epoch_time
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 
 def train(model, device, dataloader, optimizer, criterion, clip):
+    log = logging.getLogger('QGModel')
     model.train()
 
     epoch_loss = 0
