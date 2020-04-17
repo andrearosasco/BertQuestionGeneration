@@ -68,4 +68,4 @@ epochs = 4
 mb = 32
 dl_workers = 1
 checkpoint = None
-encoder_trained = True
+encoder_trained = False

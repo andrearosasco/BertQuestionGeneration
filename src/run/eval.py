@@ -49,7 +49,7 @@ def eval(model, device, dataloader, criterion):
     return epoch_loss / len(dataloader)
 
 def bleu_score(prediction, ground_truth):
-    tokenizer = BertTokenizer().from_pretrained('bert-large-cased')
+    tokenizer = BertTokenizer.from_pretrained('bert-large-cased')
     prediction = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
     ground_truth = tokenizer.convert_ids_to_tokens(ground_truth[0].tolist())
 
