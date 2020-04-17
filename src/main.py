@@ -29,8 +29,8 @@ if __name__ == '__main__':
 
     enable_reproducibility(1234)
 
-    train_set = BertDataset(bert_path / bert_model / 'toy')
-    valid_set = BertDataset(bert_path / bert_model / 'toy')
+    train_set = BertDataset(bert_path / bert_model / 'train')
+    valid_set = BertDataset(bert_path / bert_model / 'valid')
     training_loader = DataLoader(train_set, batch_size=mb, shuffle=True,
                                  num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
     valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=False,
@@ -40,9 +40,9 @@ if __name__ == '__main__':
     decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size,
                       dropout, attention, device)
     encoder = BertModel.from_pretrained(model_path / stage / bert_model)
-    encoder = encoder if encoder_trained else no_grad(encoder)
 
-    model = Seq2Seq(encoder, decoder, device)
+
+    model = Seq2Seq(encoder, decoder, device, encoder_trained)
 
     optimizer = optim.Adam(decoder.parameters())
     criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index

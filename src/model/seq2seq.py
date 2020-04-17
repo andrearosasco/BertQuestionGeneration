@@ -5,12 +5,13 @@ from torch import nn
 
 
 class Seq2Seq(nn.Module):
-    def __init__(self, encoder, decoder, device):
+    def __init__(self, encoder, decoder, device, encoder_trained):
         super().__init__()
 
         self.encoder = encoder
         self.decoder = decoder
         self.device = device
+        self.encoder_trained = encoder_trained
 
     def forward(self, src, trg, teacher_forcing_ratio=0.5):
         # src = [src sent len, batch size]
@@ -20,8 +21,12 @@ class Seq2Seq(nn.Module):
 
         input_ids, token_type_ids, attention_mask = src
 
-        with torch.no_grad():
+        if self.encoder_trained:
+            with torch.no_grad():
+                outputs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+        else:
             outputs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+
         bert_encodings = outputs[0]
 
         batch_size = trg.shape[0]
