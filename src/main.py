@@ -3,7 +3,7 @@ import math
 import logging
 
 import torch
-from torch import optim, nn
+from torch import optim, nn, cuda
 from torch.utils.data import DataLoader
 from transformers import BertModel
 
@@ -22,6 +22,8 @@ from run.utils.time import epoch_time
 
 if __name__ == '__main__':
     log = logging.getLogger('QGModel')
+    log.info(f'Running on device {cuda.current_device()}')
+
     enable_reproducibility(1234)
 
     train_set = BertDataset(bert_path / bert_model / 'toy')
