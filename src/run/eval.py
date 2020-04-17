@@ -2,6 +2,7 @@ import logging
 
 import torch
 from torch import nn
+from nltk.translate import bleu
 
 
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
@@ -20,6 +21,8 @@ def eval(model, device, dataloader, criterion):
             output_data, output_length = output_
 
             prediction = model([x.to(device) for x in input_data], output_data.to(device), 0)  # turn off teacher forcing
+
+            bleu_score(prediction, output_data.to(device))
 
             trg_sent_len = prediction.size(1)
             # trg = [trg sent len, batch size]
@@ -41,6 +44,11 @@ def eval(model, device, dataloader, criterion):
             if i % int(len(dataloader) * 0.1) == int(len(dataloader) * 0.1) - 1:
                 log.info(f'Batch {i} Sentence loss: {loss.item()} Word loss: {pw_loss.item()}')
 
-            epoch_loss += loss.item()
+            epoch_loss += pw_loss.item()
 
     return epoch_loss / len(dataloader)
+
+def bleu_score(prediction, ground_truth):
+    pass
+    # candidate = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
+    # reference = tokenizer.convert_ids_to_tokens(ground_truth[0].tolist())

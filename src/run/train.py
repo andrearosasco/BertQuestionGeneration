@@ -48,6 +48,6 @@ def train(model, device, dataloader, optimizer, criterion, clip):
                 f'Batch {i} Sentence loss {loss.item()} Word loss {pw_loss.item()}   Time: {epoch_time(start, time.time())}')
             start = time.time()
 
-        epoch_loss += loss.item()
+        epoch_loss += pw_loss.item()
 
     return epoch_loss / len(dataloader)
