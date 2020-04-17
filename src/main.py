@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
         #     if valid_loss < best_valid_loss:
         #         best_valid_loss = valid_loss
-        save_checkpoint(model_path / f'model0epoch{epoch}', epoch, model, optimizer, valid_loss_list, train_loss_list)
+        save_checkpoint(model_path / stage /f'decoder/model0epoch{epoch}', epoch, model, optimizer, valid_loss_list, train_loss_list)
 
         log.info(f'\nEpoch: {epoch + 1:02} completed | Time: {epoch_mins}m {epoch_secs}s')
         log.info(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
