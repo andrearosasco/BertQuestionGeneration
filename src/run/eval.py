@@ -52,11 +52,10 @@ def eval(model, device, dataloader, criterion):
 def bleu_score(prediction, ground_truth):
     prediction = prediction.max(2)[1]
 
-    print(prediction.shape)
-    print(ground_truth.shape)
+    for x, y in ground_truth, prediction:
 
-    idx = ground_truth.index(0) + 1
-    print(bleu(ground_truth[:, idx], prediction[:, idx], smoothing_function=SmoothingFunction().method4))
+        idx = x.tolist().index(0) + 1
+        print(bleu(x[:idx], y[:idx], smoothing_function=SmoothingFunction().method4))
     exit(0)
 
     # candidate = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
