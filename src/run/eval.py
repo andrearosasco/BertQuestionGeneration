@@ -1,6 +1,7 @@
 import logging
 
 import torch
+from nltk.translate.bleu_score import SmoothingFunction
 from torch import nn
 from nltk.translate import bleu
 from transformers import BertTokenizer
@@ -51,8 +52,11 @@ def eval(model, device, dataloader, criterion):
 def bleu_score(prediction, ground_truth):
     prediction = prediction.max(2)[1]
 
-    print(prediction.shape())
-    print(ground_truth.shape())
+    print(prediction.shape)
+    print(ground_truth.shape)
+
+    idx = ground_truth.index(0) + 1
+    print(bleu(ground_truth[:, idx], prediction[:, idx], smoothing_function=SmoothingFunction().method4))
     exit(0)
 
     # candidate = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
