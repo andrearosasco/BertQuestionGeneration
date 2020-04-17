@@ -9,7 +9,7 @@ from .utils import epoch_time
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 
 def train(model, device, dataloader, optimizer, criterion, clip):
-    log = logging.getLogger('QGModel')
+    log = logging.getLogger(__name__)
     model.train()
 
     epoch_loss = 0

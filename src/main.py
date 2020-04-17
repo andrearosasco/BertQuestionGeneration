@@ -1,6 +1,9 @@
+import logging
+logging.getLogger('transformers').setLevel(logging.WARNING)
+log = logging.getLogger(__name__)
+
 import time
 import math
-import logging
 
 import torch
 from torch import optim, nn, cuda
@@ -21,7 +24,7 @@ from run.utils.time import epoch_time
 # Importante! Se il training viene fermato e poi ripreso senza cambiare il seed lo shuffling non avviene
 
 if __name__ == '__main__':
-    log = logging.getLogger('QGModel')
+    log = logging.getLogger(__name__)
     log.info(f'Running on device {cuda.current_device()}')
 
     enable_reproducibility(1234)

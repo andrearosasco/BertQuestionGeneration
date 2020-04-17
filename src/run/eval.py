@@ -9,7 +9,7 @@ from transformers import BertTokenizer
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 
 def eval(model, device, dataloader, criterion):
-    log = logging.getLogger('QGModel')
+    log = logging.getLogger(__name__)
     model.eval()
 
     epoch_loss = 0
