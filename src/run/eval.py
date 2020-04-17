@@ -23,7 +23,8 @@ def eval(model, device, dataloader, criterion):
 
             prediction = model([x.to(device) for x in input_data], output_data.to(device), 0)  # turn off teacher forcing
 
-            bleu_score(prediction, output_data.to(device))
+            # Non può essere fatto in parallelo... Facciamolo dopo il training sul test set
+            # bleu_score(prediction, output_data.to(device))
 
             trg_sent_len = prediction.size(1)
             # trg = [trg sent len, batch size]
@@ -51,12 +52,14 @@ def eval(model, device, dataloader, criterion):
 
 def bleu_score(prediction, ground_truth):
     prediction = prediction.max(2)[1]
+    acc_bleu = 0
 
     for x, y in ground_truth, prediction:
 
         idx = x.tolist().index(0) + 1
-        print(bleu(x[:idx], y[:idx], smoothing_function=SmoothingFunction().method4))
-    exit(0)
+        acc_bleu += bleu([x[:idx]], y[:idx], smoothing_function=SmoothingFunction().method4)
+    return acc_bleu / prediction.size(0)
+
 
     # candidate = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
     # reference = tokenizer.convert_ids_to_tokens(ground_truth[0].tolist())
