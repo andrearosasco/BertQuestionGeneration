@@ -24,8 +24,8 @@ if __name__ == '__main__':
     log = logging.getLogger('QGModel')
     enable_reproducibility(1234)
 
-    train_set = BertDataset(bert_path / bert_model / 'train')
-    valid_set = BertDataset(bert_path / bert_model / 'test')
+    train_set = BertDataset(bert_path / bert_model / 'toy')
+    valid_set = BertDataset(bert_path / bert_model / 'toy')
     training_loader = DataLoader(train_set, batch_size=mb, shuffle=True,
                                  num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
     valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=False,

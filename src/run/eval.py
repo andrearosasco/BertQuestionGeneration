@@ -3,7 +3,7 @@ import logging
 import torch
 from torch import nn
 from nltk.translate import bleu
-
+from transformers import BertTokenizer
 
 pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 
@@ -49,6 +49,13 @@ def eval(model, device, dataloader, criterion):
     return epoch_loss / len(dataloader)
 
 def bleu_score(prediction, ground_truth):
-    pass
+    tokenizer = BertTokenizer().from_pretrained('bert-large-cased')
+    prediction = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
+    ground_truth = tokenizer.convert_ids_to_tokens(ground_truth[0].tolist())
+
+    print(prediction)
+    print(ground_truth)
+    exit(0)
+
     # candidate = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
     # reference = tokenizer.convert_ids_to_tokens(ground_truth[0].tolist())

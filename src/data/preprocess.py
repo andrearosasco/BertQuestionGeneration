@@ -32,8 +32,8 @@ def _extract_squad_data(data):
                 input.append((context, answer))
                 output.append(question)
                 # qui si possono inserire condizioni per limitare la grandezza del dataset
-    # input = input[:int(0.1 * len(input))]  # prende il 10% di tutto il dataset
-    # output = output[:int(0.1 * len(output))]
+    input = input[:int(0.1 * len(input))]  # prende il 10% di tutto il dataset
+    output = output[:int(0.1 * len(output))]
     return input, output
 
 
@@ -64,6 +64,5 @@ def _tokenize_data(input, output, bert_model):
 
 
 if __name__ == '__main__':
-    pass
-    # dataset = Preprocess('../data/squad/squad-v1.1-train.json', bert_model)
-    # dataset.save(f'../data/bert/{bert_model}/train')
+    dataset = Preprocess('../data/squad/squad-v1.1-valid.json', 'bert-large-cased')
+    dataset.save(f'../data/bert/bert-large-cased/toy')
