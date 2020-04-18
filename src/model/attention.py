@@ -41,7 +41,7 @@ class Attention(nn.Module):
         # v = [batch size, 1, att hid dim]
 
         # This multiplication generate a number for each query
-        attention = torch.bmm(v, energy).squeeze(2)
+        attention = torch.bmm(energy, v).squeeze(2)
         # attention= [batch size, src len]
 
         return f.softmax(attention, dim=1)
