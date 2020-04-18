@@ -22,16 +22,16 @@ class Decoder(nn.Module):
         self.out = nn.Linear(enc_hid_dim + dec_hid_dim, output_dim)
 
     def forward(self, src, queries, hidden):
-        # input = [batch size]
-        # queries = [batch size, dec hid dim]
-        # encoder_outputs = [src sent len, batch size, enc hid dim * 2]
+        # src = [batch size]
+        # queries = [batch size, src sent len, enc hid dim]
+        # hidden = [batch size, dec_hid_dim]
 
         src = src.unsqueeze(1)
-        # input = [batch size, senq len]
+        # input = [batch size, sent len]
 
         embedded = self.embedding(src)
-        embedded = self.dropout(embedded)
-        # embedded = [batch size, seq len, emb dim]
+        embedded = self.dropout(embedded) # il droput sull'input può causare problemi, valutare se eliminarlo
+        # embedded = [batch size, src sent len, emb dim]
 
         # a = [batch size, src len]
 
@@ -44,9 +44,11 @@ class Decoder(nn.Module):
         # rnn_input = torch.cat((embedded, weighted), dim=2)
         # rnn_input = [1, batch size, enc hid dim + emb dim]
 
+        # nonostante sia batch first l'ordine dell'hidden state rimane lo stesso
         _, hidden = self.rnn(embedded, hidden.unsqueeze(0))
+        hidden = hidden.squeeze(0)
 
-        a = self.attention(hidden.squeeze(0), queries)
+        a = self.attention(hidden, queries)
         a = a.unsqueeze(1)
         weighted = torch.bmm(a, queries)
         # output = [sent len, batch size, dec hid dim * n directions]
@@ -57,7 +59,6 @@ class Decoder(nn.Module):
         # hidden = [1, batch size, dec hid dim]
         # this also means that output == hidden TODO assert that is true
 
-        hidden = hidden.squeeze(0)
         weighted = weighted.squeeze(1)
         # weighted = weighted.squeeze(1)
 
@@ -65,4 +66,4 @@ class Decoder(nn.Module):
 
         # output = [bsz, output dim]
 
-        return output, hidden.squeeze(0)
+        return output, hidden

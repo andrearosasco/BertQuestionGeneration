@@ -7,6 +7,7 @@ import math
 
 import torch
 from torch import optim, nn, cuda
+from transformers import AdamW
 from torch.utils.data import DataLoader
 from transformers import BertModel
 
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 
     model = Seq2Seq(encoder, decoder, device, encoder_trained)
 
-    optimizer = optim.Adam(decoder.parameters())
+    optimizer = AdamW(decoder.parameters(), weight_decay=0.01)
     criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index
 
     if checkpoint is not None:

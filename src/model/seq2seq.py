@@ -22,12 +22,12 @@ class Seq2Seq(nn.Module):
         input_ids, token_type_ids, attention_mask = src
 
         if self.encoder_trained:
-            outputs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+            bert_hs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
         else:
             with torch.no_grad():
-                outputs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+                bert_hs = self.encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
 
-        bert_encodings = outputs[0]
+        bert_encodings = bert_hs[0]
 
         batch_size = trg.shape[0]
         max_len = trg.shape[1]

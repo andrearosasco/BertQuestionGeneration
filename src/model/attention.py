@@ -13,6 +13,7 @@ class Attention(nn.Module):
         self.enc_hid_dim = enc_hid_dim
         self.dec_hid_dim = dec_hid_dim
 
+        # dec hid dim può essere cambiato, è la dimensione dell'hidden state dell'attention
         self.attn = nn.Linear(enc_hid_dim + dec_hid_dim, dec_hid_dim)
         self.v = nn.Parameter(torch.rand(dec_hid_dim), requires_grad=True)
 
@@ -28,18 +29,19 @@ class Attention(nn.Module):
 
         # hidden = [batch size, src sent len, dec hid dim]
         # encoder_outputs = [batch size, src sent len, enc hid dim]
+        #linear layer apply to the last dimension of the input tensor
         energy = torch.tanh(self.attn(torch.cat((key, queries), dim=2)))
-        # energy = [batch size, src sent len, dec hid dim]
+        # energy = [batch size, src sent len, att hid dim]
 
-        energy = energy.permute(0, 2, 1)
-        # energy = [batch size, dec hid dim, src sent len]
 
-        # v = [dec hid dim]
-        v = self.v.repeat(batch_size, 1).unsqueeze(1)
-        # v = [batch size, 1, dec hid dim]
+        # energy = [batch size, att hid dim, src sent len]
+
+        # v = [att hid dim]
+        v = self.v.repeat(batch_size, 1).unsqueeze(2)
+        # v = [batch size, 1, att hid dim]
 
         # This multiplication generate a number for each query
-        attention = torch.bmm(v, energy).squeeze(1)
+        attention = torch.bmm(v, energy).squeeze(2)
         # attention= [batch size, src len]
 
         return f.softmax(attention, dim=1)
