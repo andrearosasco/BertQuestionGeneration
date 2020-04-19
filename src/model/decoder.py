@@ -45,8 +45,7 @@ class Decoder(nn.Module):
         # rnn_input = [1, batch size, enc hid dim + emb dim]
 
         # nonostante sia batch first l'ordine dell'hidden state rimane lo stesso
-        output, hidden = self.rnn(embedded, hidden.unsqueeze(0))
-        hidden = hidden.squeeze(0)
+        output, hidden = self.rnn(embedded, hidden)
 
         a = self.attention(output, queries)
         a = a.unsqueeze(1)
@@ -62,7 +61,7 @@ class Decoder(nn.Module):
         weighted = weighted.squeeze(1)
         # weighted = weighted.squeeze(1)
 
-        output = self.out(torch.cat((hidden, weighted), dim=1))
+        output = self.out(torch.cat((output, weighted), dim=1))
 
         # output = [bsz, output dim]
 

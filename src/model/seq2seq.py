@@ -42,7 +42,7 @@ class Seq2Seq(nn.Module):
         # first input to the decoder is the <sos> tokens
         output = trg[:, 0]
 
-        hidden = torch.zeros(output.shape[0], self.decoder.dec_hid_dim * 2).to(self.device)
+        hidden = torch.zeros(2, output.shape[0], self.decoder.dec_hid_dim).to(self.device)
 
         for t in range(1, max_len):
             output, hidden = self.decoder(output, bert_encodings, hidden)
