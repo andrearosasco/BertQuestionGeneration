@@ -48,7 +48,7 @@ def eval(model, device, dataloader, criterion):
 
             epoch_loss += pw_loss.item()
 
-    return epoch_loss / len(dataloader)
+        return epoch_loss / len(dataloader)
 
 def bleu_score(prediction, ground_truth):
     prediction = prediction.max(2)[1]

@@ -16,7 +16,7 @@ class Decoder(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.embedding = nn.Embedding(output_dim, emb_dim)
 
-        self.rnn = nn.GRU(emb_dim, dec_hid_dim, batch_first=True, num_layers=1)
+        self.rnn = nn.GRU(emb_dim, dec_hid_dim, batch_first=True, num_layers=2, dropout=dropout)
         #  The input will be the concat between attention result and input
 
         self.out = nn.Linear(enc_hid_dim + dec_hid_dim, output_dim)
@@ -45,10 +45,10 @@ class Decoder(nn.Module):
         # rnn_input = [1, batch size, enc hid dim + emb dim]
 
         # nonostante sia batch first l'ordine dell'hidden state rimane lo stesso
-        _, hidden = self.rnn(embedded, hidden.unsqueeze(0))
+        output, hidden = self.rnn(embedded, hidden.unsqueeze(0))
         hidden = hidden.squeeze(0)
 
-        a = self.attention(hidden, queries)
+        a = self.attention(output, queries)
         a = a.unsqueeze(1)
         weighted = torch.bmm(a, queries)
         # output = [sent len, batch size, dec hid dim * n directions]
