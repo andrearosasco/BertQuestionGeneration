@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     model = Seq2Seq(encoder, decoder, device, encoder_trained)
 
-    optimizer = AdamW(decoder.parameters(), weight_decay=0.01)
+    optimizer = AdamW(decoder.parameters(), weight_decay=0.05)
     criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index
 
     if checkpoint is not None:

@@ -62,8 +62,8 @@ clip = 1
 dropout = 0.5
 
 # training parameters
-epochs = 4
+epochs = 2
 mb = 32
-dl_workers = 1
+dl_workers = 0
 checkpoint = None
 encoder_trained = False
