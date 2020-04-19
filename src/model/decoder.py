@@ -46,6 +46,7 @@ class Decoder(nn.Module):
 
         # nonostante sia batch first l'ordine dell'hidden state rimane lo stesso
         output, hidden = self.rnn(embedded, hidden)
+        output = output.squeeze()
 
         a = self.attention(output, queries)
         a = a.unsqueeze(1)
