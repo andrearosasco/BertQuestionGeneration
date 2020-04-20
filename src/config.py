@@ -55,6 +55,9 @@ with (model_path / stage / bert_model / 'config.json').open('r') as f:
     bert_hidden_size = conf['hidden_size']
     bert_vocab_size = conf['vocab_size']
 
+#optimizer
+weight_decay = 0.05
+
 # decoder parameter
 decoder_hidden_size = 512
 decoder_input_size = 512  # embedding dimesions
