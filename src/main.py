@@ -13,7 +13,7 @@ from transformers import BertModel
 
 from config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_size, decoder_hidden_size, \
     bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, stage, bert_model, encoder_trained, \
-    attention_hidden_size, no_layers, num_layers, weight_decay
+    attention_hidden_size, num_layers, weight_decay
 from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility, model_size, no_grad
 from model import Attention, Decoder, Seq2Seq
 from data import BertDataset
