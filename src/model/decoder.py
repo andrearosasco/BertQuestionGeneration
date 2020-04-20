@@ -31,7 +31,7 @@ class Decoder(nn.Module):
         # input = [batch size, sent len]
 
         embedded = self.embedding(src)
-        # embedded = self.dropout(embedded) # il droput sull'input può causare problemi, valutare se eliminarlo
+        embedded = self.dropout(embedded) # il droput sull'input può causare problemi, valutare se eliminarlo
         # embedded = [batch size, src sent len, emb dim]
 
         # a = [batch size, src len]
