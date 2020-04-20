@@ -7,15 +7,12 @@ class Attention(nn.Module):
     """Implements additive attention and return the attention vector used to weight the values.
         Additive attention consists in concatenating key and query and then passing them trough a linear layer."""
 
-    def __init__(self, enc_hid_dim, dec_hid_dim):
+    def __init__(self, enc_hid_dim, dec_hid_dim, attention_hidden_size):
         super().__init__()
 
-        self.enc_hid_dim = enc_hid_dim
-        self.dec_hid_dim = dec_hid_dim
-
         # dec hid dim può essere cambiato, è la dimensione dell'hidden state dell'attention
-        self.attn = nn.Linear(enc_hid_dim + dec_hid_dim, dec_hid_dim)
-        self.v = nn.Parameter(torch.rand(dec_hid_dim), requires_grad=True)
+        self.attn = nn.Linear(enc_hid_dim + dec_hid_dim, attention_hidden_size)
+        self.v = nn.Parameter(torch.rand(attention_hidden_size), requires_grad=True)
 
     def forward(self, key, queries):
         # key = [batch size, dec hid dim]

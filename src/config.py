@@ -58,6 +58,8 @@ with (model_path / stage / bert_model / 'config.json').open('r') as f:
 # decoder parameter
 decoder_hidden_size = 512
 decoder_input_size = 512  # embedding dimesions
+attention_hidden_size = 512
+num_layers = 1
 clip = 1
 dropout = 0.5
 

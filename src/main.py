@@ -12,7 +12,8 @@ from torch.utils.data import DataLoader
 from transformers import BertModel
 
 from config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_size, decoder_hidden_size, \
-    bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, stage, bert_model, encoder_trained
+    bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, stage, bert_model, encoder_trained, \
+    attention_hidden_size, no_layers, num_layers
 from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility, model_size, no_grad
 from model import Attention, Decoder, Seq2Seq
 from data import BertDataset
@@ -37,8 +38,8 @@ if __name__ == '__main__':
     valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=False,
                               num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
 
-    attention = Attention(bert_hidden_size, decoder_hidden_size)  # add attention_hidden_size
-    decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size,
+    attention = Attention(bert_hidden_size, decoder_hidden_size, attention_hidden_size)  # add attention_hidden_size
+    decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size, num_layers,
                       dropout, attention, device)
     encoder = BertModel.from_pretrained(model_path / stage / bert_model)
 

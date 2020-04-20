@@ -3,7 +3,7 @@ from torch import nn
 
 
 class Decoder(nn.Module):
-    def __init__(self, output_dim, emb_dim, enc_hid_dim, dec_hid_dim, dropout, attention, device):
+    def __init__(self, output_dim, emb_dim, enc_hid_dim, dec_hid_dim, num_layers, dropout, attention, device):
         super().__init__()
 
         self.device = device
@@ -12,11 +12,12 @@ class Decoder(nn.Module):
         self.enc_hid_dim = enc_hid_dim
         self.dec_hid_dim = dec_hid_dim
         self.output_dim = output_dim
+        self.num_layers = num_layers
         self.attention = attention
         self.dropout = nn.Dropout(dropout)
         self.embedding = nn.Embedding(output_dim, emb_dim)
 
-        self.rnn = nn.GRU(emb_dim, dec_hid_dim, batch_first=True, num_layers=2, dropout=dropout)
+        self.rnn = nn.GRU(emb_dim, dec_hid_dim, batch_first=True, num_layers=num_layers, dropout=dropout)
         #  The input will be the concat between attention result and input
 
         self.out = nn.Linear(enc_hid_dim + dec_hid_dim, output_dim)
