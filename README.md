@@ -12,7 +12,7 @@ python main.py
 ```
 At the first run, this will preprocess the SQuAD dataset for BERT and save the new version in a directory. Also, the BERT weights will be downloaded and saved to speed subsequent runs.
 After each epoch the weight of the whole model and the optimizer state are saved in the directory specified by the paths in ```config.py```.
-> **WARNING**: If you resume the training from a checkpoint you should be aware that random shuffle of the data loader will be repeated as it were just initialized. To avoid it you can modify the seed in ```bash main.py```
+> **WARNING**: If you resume the training from a checkpoint you should be aware that the data loader random shuffle will be repeated as if it was just initialized. To avoid it you can modify the seed in ```main.py```
 
 ## Config
 When you run the code all the hyperparameters are read from the file ```config.py```. Ideally that should be the only file to modify to try new configuration. For more complex configuration tough (e.g changing the optimizer) you will have to modify ```main.py ``` or the model classes.
