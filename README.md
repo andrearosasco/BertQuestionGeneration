@@ -11,7 +11,7 @@ To run the code move to the src directory and run
 python main.py
 ```
 At the first run, this will preprocess the SQuAD dataset for BERT and save the new version in a directory. Also, the BERT weights will be downloaded and saved to speed subsequent runs.
-After each epoch the weight of the whole model and the optimizer state are saved in the directory specified by the paths in ```bash config.py```.
+After each epoch the weight of the whole model and the optimizer state are saved in the directory specified by the paths in ```config.py```.
 > **WARNING**: If you resume the training from a checkpoint you should be aware that random shuffle of the data loader will be repeated as it were just initialized. To avoid it you can modify the seed in ```bash main.py```
 
 ## Config
