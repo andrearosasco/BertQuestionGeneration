@@ -15,8 +15,8 @@ After each epoch the weight of the whole model and the optimizer state are saved
 > **WARNING**: If you resume the training from a checkpoint you should be aware that random shuffle of the data loader will be repeated as it were just initialized. To avoid it you can modify the seed in ```bash main.py```
 
 ## Config
-When you run the code all the hyperparameters are read from the file ```bash config.py```. Ideally that should be the only file to modify to try new configuration. For more complex configuration tough (e.g changing the optimizer) you will have to modify ```bash main.py ``` or the model classes.
-> **WARNING**: The teacher-forcing parameter is passed directly to the forward method of the Seq2Seq model so that it can easily be deactivated during evaluation (this will be fixed). For now you have to change the parameter where the forward method is called (i.e. train.py and eval.py)
+When you run the code all the hyperparameters are read from the file ```config.py```. Ideally that should be the only file to modify to try new configuration. For more complex configuration tough (e.g changing the optimizer) you will have to modify ```main.py ``` or the model classes.
+> **WARNING**: The teacher-forcing parameter is passed directly to the forward method of the Seq2Seq model so that it can easily be deactivated during evaluation (this will be fixed). For now you have to change the parameter where the forward method is called (i.e. ```train.py``` and ```eval.py```)
 
 ## Model
 For the encoder part I use the implementation of BERT provided by HuggingFace.
