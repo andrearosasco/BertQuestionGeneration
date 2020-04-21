@@ -57,6 +57,8 @@ with (model_path / stage / bert_model / 'config.json').open('r') as f:
 
 #optimizer
 weight_decay = 0.05
+betas = (0.9, 0.99)
+lr = 4e-4
 
 # decoder parameter
 decoder_hidden_size = 512
@@ -64,7 +66,7 @@ decoder_input_size = 512  # embedding dimesions
 attention_hidden_size = 512
 num_layers = 1
 clip = 1
-dropout = 0.5
+dropout = 0.15
 
 # training parameters
 epochs = 4
