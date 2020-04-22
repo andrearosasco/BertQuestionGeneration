@@ -27,12 +27,12 @@ def train(model, device, dataloader, optimizer, criterion, clip):
         trg_sent_len = prediction.size(1)
 
         prediction = prediction[:, 1:].contiguous().view(-1, prediction.shape[-1])
-        output_data =  output_data[:, 1:].contiguous().view(-1)  # Find a way to avoid calling contiguous
+        output_data = output_data[:, 1:].contiguous().view(-1)  # Find a way to avoid calling contiguous
 
         with torch.no_grad():
             pw_loss = pw_criterion(prediction,  output_data.to(device))
 
-        loss = criterion(prediction,  output_data.to(device))  # shouldn't we sum the losses for each generated sequence?
+        loss = criterion(prediction,  output_data.to(device))
 
         # reshape to [trg sent len - 1, batch size]
         loss = loss.view(-1, trg_sent_len - 1)

@@ -57,8 +57,9 @@ with (model_path / stage / bert_model / 'config.json').open('r') as f:
 
 #optimizer
 weight_decay = 0.05
-betas = (0.9, 0.99)
-lr = 4e-4
+betas = (0.9, 0.99) # only for Adam
+lr = 1e-2
+momentum = 0.7 # only for SGD
 
 # decoder parameter
 decoder_hidden_size = 512
