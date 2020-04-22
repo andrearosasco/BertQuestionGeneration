@@ -76,7 +76,7 @@ if __name__ == '__main__':
         log.info(f'Epoch {epoch+1} training')
         train_loss = train(model, device, training_loader, optimizer, criterion, clip)
         log.info(f'\nEpoch {epoch + 1} validation')
-        valid_loss = eval(model, device, valid_loader, criterion)
+        valid_loss, bleu_score = eval(model, device, valid_loader, criterion)
 
         train_loss_list.append(train_loss)
         valid_loss_list.append(valid_loss)
@@ -91,4 +91,4 @@ if __name__ == '__main__':
 
         log.info(f'\nEpoch: {epoch + 1:02} completed | Time: {epoch_mins}m {epoch_secs}s')
         log.info(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
-        log.info(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}\n\n')
+        log.info(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f} | Val. BLEU {bleu_score}\n\n')
