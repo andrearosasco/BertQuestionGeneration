@@ -61,9 +61,6 @@ def bleu_score(prediction, ground_truth):
         idx1 = x.tolist().index(0) if 0 in x.tolist() else len(x.tolist)
         idx2 = y.tolist().index(102) if 102 in y.tolist() else len(y.tolist)
         acc_bleu += bleu([x[1:idx1-1]], y[1:idx2-1], smoothing_function=SmoothingFunction().method4)
-        print(x[1:idx1])
-        print(y[1:idx2])
-        exit(0)
     return acc_bleu / prediction.size(0)
 
 
