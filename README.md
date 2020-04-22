@@ -282,7 +282,7 @@ encoder_trained = False
 ```python
 #optimizer AdamW
 weight_decay = 0.05
-betas = (0.9, 0.99)
+betas = (0.9, 0.999)
 lr = 4e-4
 
 #encoder
