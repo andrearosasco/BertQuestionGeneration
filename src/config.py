@@ -56,10 +56,10 @@ with (model_path / stage / bert_model / 'config.json').open('r') as f:
     bert_vocab_size = conf['vocab_size']
 
 #optimizer
-weight_decay = 0.05
-betas = (0.9, 0.99) # only for Adam
-lr = 1e-2
-momentum = 0.7 # only for SGD
+weight_decay = 0.001
+betas = (0.9, 0.999) # only for Adam
+lr = 0.05
+momentum = 0.9 # only for SGD
 
 # decoder parameter
 decoder_hidden_size = 512
@@ -67,7 +67,7 @@ decoder_input_size = 512  # embedding dimesions
 attention_hidden_size = 512
 num_layers = 1
 clip = 1
-dropout = 0.15
+dropout = 0.5
 
 # training parameters
 epochs = 4

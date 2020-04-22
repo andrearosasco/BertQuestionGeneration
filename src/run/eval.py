@@ -24,7 +24,7 @@ def eval(model, device, dataloader, criterion):
             prediction = model([x.to(device) for x in input_data], output_data.to(device), 0)  # turn off teacher forcing
 
             # Non può essere fatto in parallelo... Facciamolo dopo il training sul test set
-            # bleu_score(prediction, output_data.to(device))
+            bleu_score(prediction, output_data.to(device))
 
             trg_sent_len = prediction.size(1)
             # trg = [trg sent len, batch size]
