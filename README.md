@@ -309,3 +309,35 @@ encoder_trained = False
 | 2 | 5.798 | 6.488 |
 | 3 | 5.634 | 6.503 |
 | 4 | 5.525 | 6.524 |
+
+### Config 10
+```python
+#optimizer SGD
+weight_decay = 0.05
+momentum = 0.9
+lr = 0.05
+
+#encoder
+bert_model = 'bert-large-cased'
+
+# decoder parameter
+decoder_hidden_size = 512
+decoder_input_size = 512
+attention_hidden_size = 512
+num_layers = 1
+clip = 1
+dropout = 0.5
+
+# training parameters
+epochs = 4
+mb = 32
+dl_workers = 0
+checkpoint = None
+encoder_trained = False
+```
+|   | Train | Valid | BLEU |
+|---|:-----:|-------|------|
+| 1 | 6.103 | 6.495 |
+| 2 | 5.559 | 6.535 |
+| 3 | 5.358 | 6.517 |
+| 4 | 5.187 | 6.495 | 18.31|
