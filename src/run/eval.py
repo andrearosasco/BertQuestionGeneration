@@ -27,6 +27,8 @@ def eval(model, device, dataloader, criterion):
 
             sample_t = tokenizer.convert_ids_to_tokens(output_data[0].tolist())
             sample_p = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
+            idx1 = sample_t.index('[PAD]') if '[PAD]' in sample_t else len(sample_t)
+            idx2 = sample_p.index('[SEQ]') if '[SEQ]' in sample_p else len(sample_p)
 
             bleu = bleu_score(prediction, output_data.to(device))
 
@@ -49,7 +51,7 @@ def eval(model, device, dataloader, criterion):
 
             if i % int(len(dataloader) * 0.1) == int(len(dataloader) * 0.1) - 1:
                 log.info(f'Batch {i} Sentence loss: {loss.item()} Word loss: {pw_loss.item()} BLEU score: {bleu}\n'
-                         f'Target {sample_p} | Prediction {sample_t}')
+                         f'Target {sample_t[1:idx1-1]} | Prediction {sample_p[1:idx2-1]}')
 
             epoch_loss += pw_loss.item()
             epoch_bleu += bleu
