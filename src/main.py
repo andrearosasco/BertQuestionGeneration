@@ -35,7 +35,7 @@ if __name__ == '__main__':
     valid_set = BertDataset(bert_path / bert_model / 'valid')
     training_loader = DataLoader(train_set, batch_size=mb, shuffle=True,
                                  num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
-    valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=False,
+    valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=True,
                               num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
 
     attention = Attention(bert_hidden_size, decoder_hidden_size, attention_hidden_size)  # add attention_hidden_size
