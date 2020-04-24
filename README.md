@@ -294,7 +294,7 @@ decoder_input_size = 512
 attention_hidden_size = 512
 num_layers = 1
 clip = 1
-dropout = 0.15
+dropout, input_droput = 0.15
 
 # training parameters
 epochs = 4
@@ -326,6 +326,7 @@ decoder_input_size = 512
 attention_hidden_size = 512
 num_layers = 1
 clip = 1
+input_dropout = 0.5
 dropout = 0.5
 
 # training parameters
@@ -341,3 +342,34 @@ encoder_trained = False
 | 2 | 5.559 | 6.535 | 18.36|
 | 3 | 5.358 | 6.517 | 18.06|
 | 4 | 5.187 | 6.495 | 18.31|
+
+### Config 11
+```python
+#optimizer AdamW
+weight_decay = 0.05
+lr = 1e-3
+
+#encoder
+bert_model = 'bert-large-cased'
+
+# decoder parameter
+decoder_hidden_size = 512
+decoder_input_size = 512
+attention_hidden_size = 512
+num_layers = 2
+clip = 1
+dropout = 0.5
+
+# training parameters
+epochs = 4
+mb = 32
+dl_workers = 0
+checkpoint = None
+encoder_trained = False
+```
+|   | Train | Valid | BLEU |
+|---|:-----:|-------|------|
+| 1 | 6.696 | 6.727 | 20.69|
+| 2 | 6.512 | 6.711 | 12.63|
+| 3 | 6.487 | 6.726 | 16.61|
+| 4 | 6.461 | 6.781 | 19.66|
