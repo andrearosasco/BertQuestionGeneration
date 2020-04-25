@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     model = Seq2Seq(encoder, decoder, device, encoder_trained)
 
-    optimizer = optim.SGD(decoder.parameters(), weight_decay=weight_decay, lr=lr, momentum=momentum)
+    optimizer = optim.Adam(decoder.parameters())
     criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index
 
     if checkpoint is not None:

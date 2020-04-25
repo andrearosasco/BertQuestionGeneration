@@ -62,16 +62,16 @@ lr = 0.05
 momentum = 0.9 # only for SGD
 
 # decoder parameter
-decoder_hidden_size = 512
-decoder_input_size = 512  # embedding dimesions
-attention_hidden_size = 512
+decoder_hidden_size = 1024
+decoder_input_size = 1024  # embedding dimesions
+attention_hidden_size = 1024
 num_layers = 1
 clip = 1
 dropout = 0.5
 
 # training parameters
 epochs = 4
-mb = 32
+mb = 16
 dl_workers = 0
 checkpoint = None
 encoder_trained = False
