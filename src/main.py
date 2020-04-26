@@ -43,6 +43,7 @@ if __name__ == '__main__':
     model = Seq2Seq(decoder, device)
 
     encoder = BertModel.from_pretrained(model_path / stage / bert_model)
+    encoder.to(device)
 
     optimizer = optim.Adam(decoder.parameters())
     criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index
