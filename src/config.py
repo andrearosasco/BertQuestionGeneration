@@ -70,8 +70,8 @@ clip = 1
 dropout = 0.5
 
 # training parameters
-epochs = 4
+epochs = 5
 mb = 16
 dl_workers = 0
-checkpoint = None
+checkpoint = model_path / stage / 'decoder/qg-model-v1-3'
 encoder_trained = False
