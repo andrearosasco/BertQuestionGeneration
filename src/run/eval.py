@@ -25,9 +25,10 @@ def eval(model, device, dataloader, criterion, encoder):
 
             input_ids, token_type_ids, attention_mask = input_data
 
-            bert_hs = encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+            bert_hs = encoder(input_ids.to(device), token_type_ids=token_type_ids.to(device),
+                              attention_mask=attention_mask.to(device))
 
-            prediction = model(bert_hs[0].to(device), output_data.to(device), 0)  # turn off teacher forcing
+            prediction = model(bert_hs[0], output_data.to(device), 0)  # turn off teacher forcing
 
             sample_t = tokenizer.convert_ids_to_tokens(output_data[0].tolist())
             sample_p = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())

@@ -31,8 +31,8 @@ if __name__ == '__main__':
 
     enable_reproducibility(1234)
 
-    train_set = BertDataset(bert_path / bert_model / 'toy')
-    valid_set = BertDataset(bert_path / bert_model / 'toy')
+    train_set = BertDataset(bert_path / bert_model / 'train')
+    valid_set = BertDataset(bert_path / bert_model / 'test')
     training_loader = DataLoader(train_set, batch_size=mb, shuffle=True,
                                  num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
     valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=True,
@@ -72,9 +72,9 @@ if __name__ == '__main__':
         start_time = time.time()
 
         log.info(f'Epoch {epoch+1} training')
-        train_loss = train(model, device, training_loader, optimizer, criterion, clip, decoder)
+        train_loss = train(model, device, training_loader, optimizer, criterion, clip, encoder)
         log.info(f'\nEpoch {epoch + 1} validation')
-        valid_loss, bleu_score = eval(model, device, valid_loader, criterion, decoder)
+        valid_loss, bleu_score = eval(model, device, valid_loader, criterion, encoder)
 
         train_loss_list.append(train_loss)
         valid_loss_list.append(valid_loss)

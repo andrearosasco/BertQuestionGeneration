@@ -22,11 +22,12 @@ def train(model, device, dataloader, optimizer, criterion, clip, encoder):
 
         input_ids, token_type_ids, attention_mask = input_data
         with torch.no_grad():
-            bert_hs = encoder(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+            bert_hs = encoder(input_ids.to(device), token_type_ids=token_type_ids.to(device),
+                              attention_mask=attention_mask.to(device))
 
         optimizer.zero_grad()
 
-        prediction = model(bert_hs[0].to(device),  output_data.to(device))
+        prediction = model(bert_hs[0],  output_data.to(device))
 
         trg_sent_len = prediction.size(1)
 
