@@ -1,3 +1,1 @@
-from .attention import Attention
-from .decoder import Decoder
-from .seq2seq import Seq2Seq
+from .model import Attention, Decoder, Seq2Seq
