@@ -38,13 +38,11 @@ if __name__ == '__main__':
     valid_loader = DataLoader(valid_set, batch_size=mb, shuffle=True,
                               num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
 
-    attention = Attention(bert_hidden_size, decoder_hidden_size, attention_hidden_size)  # add attention_hidden_size
-    decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size, num_layers,
-                      dropout, attention, device)
+    attention = Attention(bert_hidden_size, decoder_hidden_size)
+    decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size, dropout, attention)
+    model = Seq2Seq(decoder, device)
+
     encoder = BertModel.from_pretrained(model_path / stage / bert_model)
-
-
-    model = Seq2Seq(encoder, decoder, device, encoder_trained)
 
     optimizer = optim.Adam(decoder.parameters())
     criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index
@@ -74,9 +72,9 @@ if __name__ == '__main__':
         start_time = time.time()
 
         log.info(f'Epoch {epoch+1} training')
-        train_loss = train(model, device, training_loader, optimizer, criterion, clip)
+        train_loss = train(model, device, training_loader, optimizer, criterion, clip, decoder)
         log.info(f'\nEpoch {epoch + 1} validation')
-        valid_loss, bleu_score = eval(model, device, valid_loader, criterion)
+        valid_loss, bleu_score = eval(model, device, valid_loader, criterion, decoder)
 
         train_loss_list.append(train_loss)
         valid_loss_list.append(valid_loss)
