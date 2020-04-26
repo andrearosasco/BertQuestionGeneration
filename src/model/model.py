@@ -1,8 +1,8 @@
-import random
+from random import random
 
-import torch.nn as nn
-import torch.nn.functional as F
 import torch
+from torch import nn
+import torch.nn.functional as F
 
 
 class Attention(nn.Module):
@@ -48,8 +48,10 @@ class Attention(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, output_dim, emb_dim, enc_hid_dim, dec_hid_dim, dropout, attention):
+    def __init__(self, output_dim, emb_dim, enc_hid_dim, dec_hid_dim, dropout, attention, device):
         super().__init__()
+
+        self.device = device
 
         self.emb_dim = emb_dim
         self.enc_hid_dim = enc_hid_dim
@@ -60,19 +62,17 @@ class Decoder(nn.Module):
 
         self.embedding = nn.Embedding(output_dim, emb_dim)
 
-        self.rnn = nn.GRU(enc_hid_dim + emb_dim, dec_hid_dim, batch_first=True)
+        self.rnn = nn.GRU(enc_hid_dim + emb_dim, dec_hid_dim, batch_first=True, num_layers=1)
         #  The input will be the concat between attention result and input
 
         self.out = nn.Linear(enc_hid_dim + dec_hid_dim + emb_dim, output_dim)
 
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, input, queries, key=None):
+    def forward(self, input, queries, key):
         # input = [batch size]
         # queries = [batch size, dec hid dim]
         # encoder_outputs = [src sent len, batch size, enc hid dim * 2]
-        if key is None:
-            key = torch.zeros(input.shape[0], self.dec_hid_dim)
 
         input = input.unsqueeze(1)
         # input = [batch size, senq len]
@@ -141,8 +141,10 @@ class Seq2Seq(nn.Module):
         # first input to the decoder is the <sos> tokens
         output = trg[:, 0]
 
+        hidden = torch.zeros(output.shape[0], self.decoder.dec_hid_dim).to(self.device)
+
         for t in range(1, max_len):
-            output, hidden = self.decoder(output, src)
+            output, hidden = self.decoder(output, src, hidden)
             outputs[:, t] = output
             teacher_force = random.random() < teacher_forcing_ratio
             # il primo 1 indica che il massimo viene cercato per ogni riga. Il secondo prende l'indice e non il valore
@@ -150,3 +152,4 @@ class Seq2Seq(nn.Module):
             output = (trg[:, t] if teacher_force else top1)
 
         return outputs
+
