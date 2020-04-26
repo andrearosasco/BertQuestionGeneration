@@ -39,7 +39,7 @@ if __name__ == '__main__':
                               num_workers=dl_workers, pin_memory=True if device == 'cuda' else False)
 
     attention = Attention(bert_hidden_size, decoder_hidden_size)
-    decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size, dropout, attention)
+    decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size, dropout, attention, device)
     model = Seq2Seq(decoder, device)
 
     encoder = BertModel.from_pretrained(model_path / stage / bert_model)
