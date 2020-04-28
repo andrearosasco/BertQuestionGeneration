@@ -50,7 +50,7 @@ setup(bert_model, model_path, stage, squad_path, bert_path)
 
 # encoder parameter
 
-with (model_path / stage / bert_model / 'config.json').open('r') as f:
+with (model_path / 'stage_one' / bert_model / 'config.json').open('r') as f:
     conf = json.load(f)
     bert_hidden_size = conf['hidden_size']
     bert_vocab_size = conf['vocab_size']
