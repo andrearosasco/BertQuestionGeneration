@@ -42,7 +42,7 @@ squad_path = Path('../data/squad')
 bert_path = Path('../data/bert')
 model_path = Path('../data/model/')
 
-stage = 'stage_one'
+stage = 'stage_two'
 bert_model = 'bert-large-cased'
 
 # if not present download the right bert version and preprocess and save the dataset
@@ -71,7 +71,7 @@ dropout = 0.5
 
 # training parameters
 epochs = 5
-mb = 16
+mb = 8
 dl_workers = 0
-checkpoint = model_path / stage / 'decoder/qg-model-v1-3'
-encoder_trained = False
+checkpoint = model_path / 'stage_one/decoder/model0epoch10'
+encoder_trained = True

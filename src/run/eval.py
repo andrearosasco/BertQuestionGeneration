@@ -32,7 +32,7 @@ def eval(model, device, dataloader, criterion, encoder):
 
             sample_t = tokenizer.convert_ids_to_tokens(output_data[0].tolist())
             sample_p = tokenizer.convert_ids_to_tokens(prediction[0].max(1)[1].tolist())
-            idx1 = sample_t.index('[PAD]') if '[PAD]' in sample_t else len(sample_t)
+            idx1 = sample_t.index('[SEP]') if '[SEP]' in sample_t else len(sample_t)
             idx2 = sample_p.index('[SEP]') if '[SEP]' in sample_p else len(sample_p)
 
             bleu = bleu_score(prediction, output_data.to(device))
@@ -56,8 +56,8 @@ def eval(model, device, dataloader, criterion, encoder):
 
             if i % int(len(dataloader) * 0.1) == int(len(dataloader) * 0.1) - 1:
                 log.info(f'Batch {i} Sentence loss: {loss.item()} Word loss: {pw_loss.item()} BLEU score: {bleu}\n'
-                         f'Target {sample_t[1:idx1-1]}\n'
-                         f'Prediction {sample_p[1:idx2-1]}\n\n')
+                         f'Target {sample_t[1:idx1]}\n'
+                         f'Prediction {sample_p[1:idx2]}\n\n')
 
             epoch_loss += pw_loss.item()
             epoch_bleu += bleu
@@ -71,10 +71,10 @@ def bleu_score(prediction, ground_truth):
     for x, y in zip(ground_truth, prediction):
         x = tokenizer.convert_ids_to_tokens(x.tolist())
         y = tokenizer.convert_ids_to_tokens(y.tolist())
-        idx1 = x.index('[PAD]') if '[PAD]' in x else len(x)
+        idx1 = x.index('[SEP]') if '[SEP]' in x else len(x)
         idx2 = y.index('[SEP]') if '[SEP]' in y else len(y)
 
-        acc_bleu += bleu([x[1:idx1 - 1]], y[1:idx2 - 1], smoothing_function=SmoothingFunction().method4)
+        acc_bleu += bleu([x[1:idx1]], y[1:idx2], [0.25, 0.25, 0.25, 0.25],smoothing_function=SmoothingFunction().method4)
     return acc_bleu / prediction.size(0)
 
 
