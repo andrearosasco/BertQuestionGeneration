@@ -24,7 +24,7 @@ def setup(bert_model, model_path, stage, squad_path, bert_path):
     file.close()
 
     log.info(f'Setup: downloading {bert_model}')
-    BertModel.from_pretrained(bert_model).save_pretrained(model_path / stage / bert_model)
+    BertModel.from_pretrained(bert_model).save_pretrained(model_path / 'stage_one' / bert_model)
 
     log.info(f'Setup: preprocessing {bert_model} input')
     for x in squad_path.iterdir():

@@ -42,7 +42,7 @@ if __name__ == '__main__':
     decoder = Decoder(bert_vocab_size, decoder_input_size, bert_hidden_size, decoder_hidden_size, dropout, attention, device)
     model = Seq2Seq(decoder, device)
 
-    encoder = BertModel.from_pretrained(model_path / stage / bert_model)
+    encoder = BertModel.from_pretrained(model_path / 'stage_one' / bert_model)
     encoder.to(device)
 
     optimizer = optim.Adam(decoder.parameters())
