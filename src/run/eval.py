@@ -12,6 +12,7 @@ tokenizer = BertTokenizer.from_pretrained('bert-large-cased')
 def eval(model, device, dataloader, criterion, encoder):
     log = logging.getLogger(__name__)
     model.eval()
+    encoder.eval()
 
     epoch_loss = 0
     epoch_bleu = 0

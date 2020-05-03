@@ -23,9 +23,11 @@ def train(model, device, dataloader, optimizer, criterion, clip, encoder, encode
         input_ids, token_type_ids, attention_mask = input_data
 
         if encoder_trained:
+            encoder.train()
             bert_hs = encoder(input_ids.to(device), token_type_ids=token_type_ids.to(device),
                               attention_mask=attention_mask.to(device))
         else:
+            encoder.eval()
             with torch.no_grad():
                 bert_hs = encoder(input_ids.to(device), token_type_ids=token_type_ids.to(device),
                                   attention_mask=attention_mask.to(device))
