@@ -11,6 +11,7 @@ pw_criterion = nn.CrossEntropyLoss(ignore_index=0)  # Pad Index
 def train(model, device, dataloader, optimizer, criterion, clip, encoder, encoder_trained):
     log = logging.getLogger(__name__)
     model.train()
+    encoder.train() if encoder_trained else encoder.eval()
 
     epoch_loss = 0
 
@@ -22,17 +23,16 @@ def train(model, device, dataloader, optimizer, criterion, clip, encoder, encode
 
         input_ids, token_type_ids, attention_mask = input_data
 
+        optimizer.zero_grad()
+
         if encoder_trained:
-            encoder.train()
             bert_hs = encoder(input_ids.to(device), token_type_ids=token_type_ids.to(device),
                               attention_mask=attention_mask.to(device))
         else:
-            encoder.eval()
             with torch.no_grad():
                 bert_hs = encoder(input_ids.to(device), token_type_ids=token_type_ids.to(device),
                                   attention_mask=attention_mask.to(device))
 
-        optimizer.zero_grad()
 
         prediction = model(bert_hs[0],  output_data.to(device))
 
