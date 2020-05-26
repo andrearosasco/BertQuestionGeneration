@@ -49,7 +49,7 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss(ignore_index=0, reduction='none')  # Pad Index
 
     if checkpoint is not None:
-        last_epoch, model_dict, optim_dict, valid_loss_list, train_loss_list = load_checkpoint(checkpoint)
+        last_epoch, model_dict, optim_dict, valid_loss_list, train_loss_list, bleu_list = load_checkpoint(checkpoint)
         last_epoch += 1
         model.load_state_dict(model_dict)
         best_valid_loss = min(valid_loss_list)
