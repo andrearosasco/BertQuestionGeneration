@@ -153,3 +153,91 @@ class Seq2Seq(nn.Module):
 
         return outputs
 
+
+import torch.nn.functional as F
+from torch import nn
+import torch
+
+
+class BeamSearch(nn.Module):
+
+    def __init__(self, decoder, device, k):
+        super().__init__()
+        self.decoder = decoder
+        self.device = device
+        self.k = k
+
+    def forward(self, src):
+        batch_size = src.shape[0]
+        max_len = 40
+        trg_vocab_size = self.decoder.output_dim
+
+        search_results = torch.zeros(batch_size, self.k, max_len).type(torch.LongTensor).to(self.device)
+        search_map = torch.zeros(batch_size, self.k, max_len).type(torch.LongTensor).to(self.device)
+        outputs = torch.zeros(batch_size, max_len).type(torch.LongTensor).to(self.device)
+        hiddens = torch.zeros(batch_size, self.k, self.decoder.dec_hid_dim).to(self.device)
+        ended = torch.zeros(batch_size, self.k).to(self.device)
+        true = torch.ones(ended.shape).to(self.device)
+        no_prob = torch.Tensor(batch_size, trg_vocab_size).fill_(float('-Inf')).to(self.device)
+        no_prob[:, 102] = 0
+        lengths = torch.zeros(batch_size, self.k).to(self.device)
+
+        output = torch.Tensor(batch_size).fill_(102).type(torch.LongTensor).to(self.device)
+        hidden = torch.zeros(output.shape[0], self.decoder.dec_hid_dim).to(self.device)
+
+        output, hidden = self.decoder(output, src, hidden)
+        output = F.log_softmax(output, dim=1)
+
+        for i in range(self.k):
+            hiddens[:, i, :] = hidden
+
+        scores, search_results[:, :, 0] = torch.topself.k(output, self.k, 1)
+
+        for t in range(1, max_len):  # walk over each step in the sequence
+            candidates = torch.Tensor(batch_size, 0).to(self.device)
+            for i in range(self.k):  # expands each candidate
+
+                idx = search_map[:, 0, t - 1].unsqueeze(1).unsqueeze(1)
+                idx = idx.expand(-1, -1, hiddens.shape[2])
+                hidden = hiddens.gather(1, idx).squeeze(1).squeeze(1)
+
+                output, hiddens[:, i, :] = self.decoder(search_results[:, i, t - 1], src,
+                                                        hidden)  # for every word it contains the probability
+                output = F.log_softmax(output, dim=1)
+
+                output = torch.where(ended[:, i].unsqueeze(1).expand_as(output) == 0, output, no_prob)
+                lengths[:, i] = torch.where(ended[:, i] == 0, lengths[:, i] + 1, lengths[:, i])
+
+                output = output + scores[:, i].unsqueeze(1)
+
+                candidates = torch.cat((candidates, output), 1)  # concatenate for every possibility
+
+            norm_cand = torch.tensor(candidates)
+
+            for i in range(self.k - 1):
+                norm_cand[:, trg_vocab_size * i:trg_vocab_size * (i + 1)] /= (lengths[:, i] ** 0.7).unsqueeze(1)
+
+            _, topk = torch.topk(norm_cand, self.k, 1)  # topk dim is 15*3, scores too
+
+            for i in range(topk.shape[0]):
+                scores[i, :] = candidates[i, topk[i, :]]
+
+            ended = torch.where((topk - (topk / trg_vocab_size) * trg_vocab_size) == 102, true, ended)
+            #         print(f'{ended[0]} {lengths[0]}')
+
+            #         print(scores[0])
+            #         print(tokenizer.convert_ids_to_tokens(search_results[0, :, 0].tolist()))
+
+            search_results[:, :, t] = topk - (
+                    topk / trg_vocab_size) * trg_vocab_size  # si può fare durante la ricostruzione
+            search_map[:, :, t] = topk / trg_vocab_size
+
+        _, idx = torch.max(scores, 1)
+        #     idx[0] = 4
+        #     print(idx[0])
+        #     print(scores[0])
+
+        for t in range(max_len - 1, -1, -1):
+            outputs[:, t] = search_results[:, :, t].gather(1, idx.unsqueeze(1)).squeeze(1)
+            idx = search_map[:, :, t].gather(1, idx.unsqueeze(1)).squeeze(1)
+        return outputs

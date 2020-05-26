@@ -42,8 +42,8 @@ squad_path = Path('../data/squad')
 bert_path = Path('../data/bert')
 model_path = Path('../data/model/')
 
-stage = 'stage_two'
-bert_model = 'bert-large-cased'
+stage = 'stage_one'
+bert_model = 'bert-base-cased'
 
 # if not present download the right bert version and preprocess and save the dataset
 setup(bert_model, model_path, stage, squad_path, bert_path)
@@ -62,16 +62,16 @@ lr = 0.05
 momentum = 0.9 # only for SGD
 
 # decoder parameter
-decoder_hidden_size = 1024
-decoder_input_size = 1024  # embedding dimesions
-attention_hidden_size = 1024
+decoder_hidden_size = 512
+decoder_input_size = 512  # embedding dimesions
+attention_hidden_size = 512
 num_layers = 1
 clip = 1
 dropout = 0.5
 
 # training parameters
-epochs = 5
-mb = 8
+epochs = 40
+mb = 88
 dl_workers = 0
-checkpoint = model_path / 'stage_one/decoder/model0epoch10'
-encoder_trained = True
+checkpoint = None
+encoder_trained = False
