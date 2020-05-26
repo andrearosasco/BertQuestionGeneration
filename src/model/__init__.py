@@ -1,1 +1,1 @@
-from .model import Attention, Decoder, Seq2Seq
+from .model import Attention, Decoder, Seq2Seq, BeamSearch

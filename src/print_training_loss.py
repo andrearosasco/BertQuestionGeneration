@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 if __name__ == '__main__':
-    checkpoint = '../data/model/stage_one/decoder/model17181920epoch39'
+    checkpoint = '../data/model/stage_one/decoder/model5678epoch39'
     last_epoch, model_dict, optim_dict, valid_loss, train_loss, bleu_score = load_checkpoint(checkpoint)
     epochs = range(1, len(train_loss) + 1)
 

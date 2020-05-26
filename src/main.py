@@ -15,7 +15,7 @@ from config import checkpoint, bert_path, mb, dl_workers, device, bert_hidden_si
     bert_vocab_size, decoder_input_size, dropout, epochs, clip, model_path, stage, bert_model, encoder_trained, \
     attention_hidden_size, num_layers, weight_decay, betas, lr, momentum
 from model.utils import load_checkpoint, init_weights, save_checkpoint, enable_reproducibility, model_size, no_grad
-from model import Attention, Decoder, Seq2Seq
+from model import Attention, Decoder, Seq2Seq, BeamSearch
 from data import BertDataset
 from run import train, eval
 from run.utils.time import epoch_time

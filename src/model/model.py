@@ -191,7 +191,7 @@ class BeamSearch(nn.Module):
         for i in range(self.k):
             hiddens[:, i, :] = hidden
 
-        scores, search_results[:, :, 0] = torch.topself.k(output, self.k, 1)
+        scores, search_results[:, :, 0] = torch.topk(output, self.k, 1)
 
         for t in range(1, max_len):  # walk over each step in the sequence
             candidates = torch.Tensor(batch_size, 0).to(self.device)
