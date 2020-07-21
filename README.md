@@ -1,3 +1,5 @@
+> **WARNING**: Due to university commitments I wasn't able to keep this repo up to date. The branch "alt-attention" contains the most recent code and a better implementation of the attention mechanism, though the code on that branch may be kind of messy and has to be refactored.
+
 # BertQuestionGeneration
 This is a university project for the course Human Language Technology, University of Pisa.
 The aim is to train Question Generation model on the SQuAD dataset using BERT as the encoder.
