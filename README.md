@@ -1,4 +1,4 @@
-> **WARNING**: Due to university commitments I wasn't able to keep this repo up to date. The branch "alt-attention" contains the most recent code and a better implementation of the attention mechanism, though the code on that branch may be kind of messy and has to be refactored. Also, the experiments in the "Results" section use too few epochs, to achieve better preformances the algorithm should be run for more epochs. If it's too expensive you can switch to "bert-base" and reduce the dimension of the LSTM and the Attention layers.
+> **WARNING**: Due to university commitments I wasn't able to keep this repo up to date. The branch "alt-attention" contains the most recent code and a better implementation of the attention mechanism, though the code on that branch may be kind of messy and has to be refactored.
 
 # BertQuestionGeneration
 This is a university project for the course Human Language Technology, University of Pisa.
